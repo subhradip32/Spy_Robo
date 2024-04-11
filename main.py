@@ -11,6 +11,13 @@ from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg as Figure
 import matplotlib.pyplot as plt
 import numpy as np
 from kivy.clock import Clock
+import cv2 as cv
+from kivy.uix.image import Image
+from kivy.graphics.texture import Texture
+from kivy.uix.camera import Camera
+import requests
+import Camera 
+        
 
 
 def redeffine_data(data):
@@ -39,7 +46,7 @@ class PolarPlotApp(App):
         theta = [[0,0],[0,18],[0,36],[0,54],[0,72],[0,90],[0,108],[0,126],[0,44],[0,162]]
 
         for i in range(len(self.r)):
-            ax.plot(theta[i],self.r[i],color = "g")
+            ax.plot(theta[i],self.r[i],color = "r")
         
         # Plotting each point separately dot plot 
         # for i in range(len(self.r)):
@@ -51,7 +58,7 @@ class PolarPlotApp(App):
 
         ax.set_ylim(0,10)
         
-        ax.set_facecolor("lightred")
+        ax.set_facecolor("lightgreen")
         # Create a canvas for the plot
         canvas = FigureCanvas(fig)
         self.layout.clear_widgets()
@@ -66,10 +73,37 @@ class PolarPlotApp(App):
 
 
 
+
+class OpenCVCamera(BoxLayout):
+    def __init__(self, **kwargs):
+        super(OpenCVCamera, self).__init__(**kwargs)
+
+        self.cam_data = Camera.Cam_feed()
+        self.img = Image()
+        self.add_widget(self.img)
+
+        # Updating the cam feed using the Clock
+        Clock.schedule_interval(self.update, 1.0 / 60.0)
+
+    def update(self, dt):
+        frame = self.cam_data.get_frame()
+        frame = cv.flip(frame,-1)
+
+        if frame is not None:
+            # Convert frame to texture and assign to image widget
+            texture = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
+            texture.blit_buffer(frame.tobytes(), colorfmt='bgr', bufferfmt='ubyte')
+            self.img.texture = texture
+        
+        print(frame)
+
+
+
 red = [1, 0, 0, 1]  
 green = [0, 1, 0, 1]  
 blue = [0, 0, 1, 1]  
 purple = [1, 0, 1, 1]
+white = [1,1,1,1]
 
 class Grid():
     def all_layout(self):
@@ -79,7 +113,11 @@ class Grid():
         main_layout.add_widget(obstacle.build())
         
         # main_layout.add_widget(Label(text="Radar Display"))
-        main_layout.add_widget(Label(text="Camera Display"))
+        # read = CamFeed()
+        # main_layout.add_widget(Label(text="Camera Display"))
+        main_layout.add_widget(OpenCVCamera())
+        
+        # main_layout.add_widget(OpenCVCamera())
 
         # Movement buttons 
         move_layout = GridLayout(cols=1)
@@ -92,16 +130,20 @@ class Grid():
 
         move_layout.add_widget(sub_layout)
         move_layout.add_widget(Button(text="V"))
+        move_layout.add_widget(Label(text = "Data of output:--------------> ",color = purple))
 
 
         cam_move = GridLayout(cols=1)
-        cam_move.add_widget(Button(text = "Cam^",background_color = [1, 0, 0, 1]))
+        cam_move.add_widget(Button(text = "Cam^",background_color = red))
         #samll cam 
         sub_cam = GridLayout(cols= 2)
-        sub_cam.add_widget(Button(text = "<",background_color = [1, 0, 0, 1]))
-        sub_cam.add_widget(Button(text = ">",background_color = [1, 0, 0, 1]))
+        sub_cam.add_widget(Button(text = "<",background_color = red))
+        sub_cam.add_widget(Button(text = ">",background_color = red))
         cam_move.add_widget(sub_cam)
-        cam_move.add_widget(Button(text = "Camv",background_color = [1, 0, 0, 1]))
+        cam_move.add_widget(Button(text = "Camv",background_color = red))
+
+        cam_move.add_widget(Button(text="Download Data",color = white,background_color = green))
+
 
         main_layout.add_widget(move_layout)
         main_layout.add_widget(cam_move)
@@ -114,5 +156,5 @@ class TestApp(App):
     
 TestApp().run()
 
-# y = redeffine_data([10,10,10,2,3,10,2,2,2,10,10])
-# print(y)
+
+# creating the ml configuration on it 

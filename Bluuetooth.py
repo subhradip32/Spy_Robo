@@ -1,5 +1,6 @@
 from pyblue import bluetooth
 import time
+import serial 
 
 # Bluetooth MAC address of the HC-05 module
 class Bluetooth_device():
@@ -49,3 +50,30 @@ class Bluetooth_device():
     #         data_to_send = self.read_device_data()
     #         self.send_data_over_bluetooth(data_to_send)
     #         time.sleep(1)  # Adjust delay as needed
+
+
+# Replace 'COMX' with the COM port of your HC-05 module
+HC05_COM_PORT = 'COMX'
+
+def send_command(command):
+    try:
+        # Create a serial connection
+        ser = serial.Serial(HC05_COM_PORT, 9600, timeout=1)
+        
+        # Wait for the connection to be established
+        time.sleep(2)
+        
+        # Send the command
+        ser.write(command.encode())
+        
+        # Close the serial connection
+        ser.close()
+        
+        print("Command '{}' sent successfully.".format(command))
+    except Exception as e:
+        print("Error:", e)
+
+# Example command to send
+command = 'F'  # Replace 'A' with your desired command
+
+send_command(command)

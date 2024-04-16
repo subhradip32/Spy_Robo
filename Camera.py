@@ -17,12 +17,12 @@ class Cam_feed():
     def __init__(self):
         self.ws_url = "ws://192.168.4.1/Camera"
         self.image = None
-        ws = websocket.WebSocketApp(self.ws_url,
+        self.ws = websocket.WebSocketApp(self.ws_url,
                                     on_message=self.on_message,
                                     on_error=on_error,
                                     on_close=on_close)
-        ws.on_open = on_open
-        self.thread = threading.Thread(target=ws.run_forever)
+        self.ws.on_open = on_open
+        self.thread = threading.Thread(target=self.ws.run_forever)
         self.thread.daemon = True
         self.thread.start()
 
@@ -34,6 +34,7 @@ class Cam_feed():
 
     def get_frame(self):
         return self.image
+    
 
 # Create an instance of Cam_feed
 # cam = Cam_feed()

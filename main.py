@@ -9,7 +9,7 @@ from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg as Figure
 from kivy.clock import Clock
 import cv2 as cv
 from kivy.uix.image import Image
-from kivy.graphics.texture import Textureaqqqqqqqqqqqqqqqqqqqqq
+from kivy.graphics.texture import Texture
 from kivy.uix.camera import Camera
 import threading
 import websocket

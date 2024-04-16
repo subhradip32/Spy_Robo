@@ -1,9 +1,0 @@
-certifi==2023.7.22
-chardet
-cv2
-idna
-requests
-threading
-ultralytics
-urllib3
-websocket

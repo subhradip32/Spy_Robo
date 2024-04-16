@@ -34,13 +34,3 @@ class Cam_feed():
 
     def get_frame(self):
         return self.image
-    
-
-# Create an instance of Cam_feed
-# cam = Cam_feed()
-
-# # Continuously print image data
-# while True:
-#     frame = cam.get_frame()
-#     if frame is not None:
-#         print(frame)

@@ -34,7 +34,3 @@ class DetectObject():
             cv.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 5)
 
         return frame
-
-
-# self.filter_image =  cv.cvtColor(self.filter_image, cv.COLOR_BGR2RGB)
-# self.filter_image = Objectdetection.DetectObject().create_bounding_box(self.filter_image)
